@@ -95,6 +95,15 @@ func WithUsernamePassword(username string, password string) ConfigOpt {
 	})
 }
 
+func WithSigners(username string, signers ...ssh.Signer) ConfigOpt {
+	return newFuncConfigOpt(func(c *config) {
+		c.SSHConfig.User = username
+		c.SSHConfig.Auth = []ssh.AuthMethod{
+			ssh.PublicKeys(signers...),
+		}
+	})
+}
+
 // WithSSHPort allows you to specify an alternate SSH port, defaults to 22.
 func WithSSHPort(port int) ConfigOpt {
 	return newFuncConfigOpt(func(c *config) {
