@@ -62,15 +62,12 @@ func readUntilPrompt(ctx context.Context, r io.Reader, prompt *regexp.Regexp) (s
 	var output = new(bytes.Buffer)
 	rc := newContextReader(ctx, r)
 	readSize := minReadSize
+	tracerouteSnowFlake := 0
 	for {
 		b := make([]byte, readSize)
 
 		n, err := rc.Read(b)
 		if err != nil {
-
-			if err == io.EOF {
-				break
-			}
 			return "", fmt.Errorf("error reading output from device %w: %v", errRead, err)
 		}
 		if readSize == n && readSize < maxReadSize {
@@ -79,8 +76,19 @@ func readUntilPrompt(ctx context.Context, r io.Reader, prompt *regexp.Regexp) (s
 		output.Write(b[:n])
 		tempSlice := bytes.ReplaceAll(output.Bytes(), []byte("\r\n"), []byte("\n"))
 		tempSlice = bytes.ReplaceAll(tempSlice, []byte("\r"), []byte("\n"))
+
 		if prompt.Match(tempSlice[bytes.LastIndex(tempSlice, []byte("\n"))+1:]) {
 			break
+		}
+
+		// sometimes traceroute will go into *  *  * if the control plane of the
+		// routers filtering icmp, we'll timeout eventually but it would take a
+		// while. It's sensible to stop here to avoid timeouts.
+		if tracerouteSnowFlake > 2 {
+			break
+		}
+		if bytes.Contains(tempSlice[bytes.LastIndex(tempSlice, []byte("\n"))+1:], []byte("*  *  *")) {
+			tracerouteSnowFlake++
 		}
 	}
 
