@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var generalPrompt = regexp.MustCompile(`(^[a-zA-Z0-9_-]+[#|>])|(^[a-zA-Z0-9_-]+\([a-z-]+\)#)`)
+var generalPrompt = regexp.MustCompile(`([a-zA-Z0-9_-]+[#|>])|(^[a-zA-Z0-9_-]+\([a-z-]+\)#)`)
 var enablePrompt = regexp.MustCompile(`^[Pp]assword:`)
 
 // Ios is the Netrasp driver for Cisco IOS.
