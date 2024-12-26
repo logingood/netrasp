@@ -67,6 +67,10 @@ func readUntilPrompt(ctx context.Context, r io.Reader, prompt *regexp.Regexp) (s
 
 		n, err := rc.Read(b)
 		if err != nil {
+
+			if err == io.EOF {
+				break
+			}
 			return "", fmt.Errorf("error reading output from device %w: %v", errRead, err)
 		}
 		if readSize == n && readSize < maxReadSize {
