@@ -35,6 +35,7 @@ func TestFakeIOSRunCommand(t *testing.T) {
 func TestFakeIOSEnableAndConfigureCommand(t *testing.T) {
 	device, err := New("test1",
 		WithUsernamePassword("username", "password"),
+		WithEnablePasword("password2"),
 		WithInsecureIgnoreHostKey(),
 		WithDriver("ios"),
 		withFakeFileConnection("testdata/ios/enable_with_config"),

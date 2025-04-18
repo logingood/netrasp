@@ -59,7 +59,7 @@ func (i ios) Enable(ctx context.Context) error {
 		return err
 	}
 	host := i.Connection.GetHost()
-	_, err = i.Run(ctx, host.password)
+	_, err = i.Run(ctx, host.enablePassword)
 
 	if err != nil {
 		return err

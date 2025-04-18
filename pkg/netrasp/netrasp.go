@@ -85,6 +85,12 @@ func newFuncConfigOpt(f func(*config)) *funcConfigOpt {
 	}
 }
 
+func WithEnablePasword(password string) ConfigOpt {
+	return newFuncConfigOpt(func(c *config) {
+		c.Host.enablePassword = password
+	})
+}
+
 func WithUsernamePassword(username string, password string) ConfigOpt {
 	return newFuncConfigOpt(func(c *config) {
 		c.SSHConfig.User = username

@@ -16,8 +16,9 @@ type connection interface {
 
 // host defines host specific information.
 type host struct {
-	Address  string
-	Port     int
-	Platform Platform
-	password string
+	Address        string
+	Port           int
+	Platform       Platform
+	password       string
+	enablePassword string
 }
